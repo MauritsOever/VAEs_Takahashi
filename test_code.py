@@ -81,3 +81,43 @@ sb.heatmap(np.corrcoef(PCs_Z, rowvar=False))
 plt.plot(range(len(X_Z)), X_Z[:,16] / np.std(X_Z[:,16]))
 plt.plot(range(len(X_Z)), X_Z[:,39])
 plt.show()
+
+
+
+#%% test latent --> original situations
+
+import os
+import random
+import numpy as np
+import seaborn as sb
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+
+
+from datasets import load_dataset
+from models import GaussianVAE, StudentsTVAE
+from data.datafuncs import GetData, GenerateAllDataSets
+
+X, weights = GetData('returns')
+latent = 5
+
+model = GaussianVAE(X.shape[1], latent, 15, 3)
+
+model.fit(X, k=1, batch_size=100,
+          learning_rate=1e-4, n_epoch=500,
+          warm_up=False, is_stoppable=False,
+          X_valid=X)
+
+# z = model.decode(X)[0]
+
+num = 11
+start = -5
+end = 5
+
+z = np.linspace(start, end, num=num).reshape((num,1))
+array  = np.linspace(start, end, num=num).reshape((num,1))
+for i in range(latent-1):
+    z = np.append(z, array, axis=1)
+    
+test = model.decode(z)[0]
+port_test = np.mean(test, axis=1)
