@@ -91,7 +91,7 @@ def GARCH_analysis(mode, dist):
                 model = StudentsTVAE(X.shape[1], n_latent, round((X.shape[1]+n_latent)/2), layers=layers)
                 
             model.fit(X, k=1, batch_size=100,
-                      learning_rate=1e-4, n_epoch=epochs,
+                      learning_rate=0.01, n_epoch=epochs,
                       warm_up=False, is_stoppable=False,
                       X_valid=X)
             
@@ -131,7 +131,8 @@ def GARCH_analysis(mode, dist):
             violations = (portVaR > np.mean(X, axis=1)).astype(int)
             # backtest
             results[:,latent_col] = backtest(violations, q)
-            
+        
+        print(results)
         return results
             
     
@@ -162,8 +163,8 @@ test = GARCH_analysis('VAE', 'normal')
 #%%
 
 def main():
-    
-    GARCH_analysis('VAE', 'normal')
+    pass
+    # GARCH_analysis('VAE', 'normal')
     
     
     # raise NotImplementedError

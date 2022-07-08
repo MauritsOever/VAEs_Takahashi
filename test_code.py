@@ -23,7 +23,7 @@ n_in = X_train.shape[1]
 n_latent = 5
 n_h = round((n_in + n_latent)/2)
 
-epochs = 500
+epochs = 1000
 
 dist = 'normal'
 # dist = 't'
@@ -38,7 +38,7 @@ save_path = os.path.join(os.getcwd(), r'results')
 model.fit(X_train, k=1, batch_size=100,
           learning_rate=1e-4, n_epoch=epochs,
           warm_up=False, is_stoppable=False,
-          X_valid=X_train, path=save_path)
+          X_valid=X_train)
 
 if dist == 'normal':
     reconstruct, _ = model.reconstruct(X_train)
